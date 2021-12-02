@@ -26,7 +26,7 @@ from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import Qt, QUrl, QTimer
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineSettings
 
-GV_FLG = True  # Flag to identify whether use gloval value
+GV_FLG = False  # Flag to identify whether use gloval value
 if GV_FLG: import webGlobal as gv
 URL_RCD = gv.URL_LIST if GV_FLG else 'urllist.txt'  # file to save url list
 RST_DIR = gv.DATA_DIR if GV_FLG else 'datasets'

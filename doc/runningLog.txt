@@ -1,0 +1,40 @@
+PS C:\Works\SingtelTw\Test_Program\WebScreenShoter\src> & C:/Users/liu_y/AppData/Local/Programs/Python/Python37-32/python.exe c:/Works/SingtelTw/Test_Program/WebScreenShoter/src/webScreenShoter.py
+> load url record file urllist.txt
+> Process URL 1: https://www.google.com
+> Finished.
+> Process URL 2: https://www.carousell.sg/
+js: Failed to execute 'write' on 'Document': It isn't possible to write into a document from an asynchronously-loaded external script unless it is explicitly opened.
+js: ResizeObserver loop limit exceeded
+js: ResizeObserver loop limit exceeded
+js: ResizeObserver loop limit exceeded
+js: ResizeObserver loop limit exceeded
+js: ResizeObserver loop limit exceeded
+js: ResizeObserver loop limit exceeded
+js: ResizeObserver loop limit exceeded
+js: ResizeObserver loop limit exceeded
+js: ResizeObserver loop limit exceeded
+js: ResizeObserver loop limit exceeded
+js: ResizeObserver loop limit exceeded
+js: ResizeObserver loop limit exceeded
+js: ResizeObserver loop limit exceeded
+js: ResizeObserver loop limit exceeded
+js: ResizeObserver loop limit exceeded
+js: ResizeObserver loop limit exceeded
+js: ResizeObserver loop limit exceeded
+js: ResizeObserver loop limit exceeded
+js: ResizeObserver loop limit exceeded
+js: ResizeObserver loop limit exceeded
+js: ResizeObserver loop limit exceeded
+js: ResizeObserver loop limit exceeded
+js: A cookie associated with a cross-site resource at http://yahoo.com/ was set without the `SameSite` attribute. A future release of Chrome will only deliver cookies with cross-site requests if they are set with `SameSite=None` and `Secure`. You can review cookies in developer tools under Application>Storage>Cookies and see more details at https://www.chromestatus.com/feature/5088147346030592 and https://www.chromestatus.com/feature/5633521622188032.
+js: A cookie associated with a cross-site resource at https://yahoo.com/ was set without the `SameSite` attribute. A future release of Chrome will only deliver cookies with cross-site requests if they are set with `SameSite=None` and `Secure`. You can review cookies in developer tools under Application>Storage>Cookies and see more details at https://www.chromestatus.com/feature/5088147346030592 and https://www.chromestatus.com/feature/5633521622188032.
+js: A cookie associated with a cross-site resource at http://openx.net/ was set without the `SameSite` attribute. A future release of Chrome will only deliver cookies with cross-site requests if they are set with `SameSite=None` and `Secure`. You can review cookies in developer tools under Application>Storage>Cookies and see more details at https://www.chromestatus.com/feature/5088147346030592 and https://www.chromestatus.com/feature/5633521622188032.
+js: Unrecognized feature: 'attribution-reporting'.
+> Finished.
+> Process URL 3: https://www.google.com/search?q=github&sxsrf=AOaemvJh3t5_h8H85AE8Ajbb1IMnBrRISA%3A1636698503535&source=hp&ei=hwmOYY6mHdGkqtsPq8S9sAY&iflsig=ALs-wAMAAAAAYY4Xl7GLWS16_xc2Q9XrG0p3q277DpkL&oq=&gs_lcp=Cgdnd3Mtd2l6EAEYADIHCCMQ6gIQJzIHCCMQ6gIQJzIHCCMQ6gIQJzIHCCMQ6gIQJzIHCCMQ6gIQJzIHCCMQ6gIQJzINCC4QxwEQowIQ6gIQJzIHCCMQ6gIQJzIHCCMQ6gIQJzIHCCMQ6gIQJ1AAWABgjgdoAXAAeACAAQCIAQCSAQCYAQCwAQo&sclient=gws-wiz
+> Finished.
+> Process URL 4: https://stackoverflow.com/questions/66022042/how-to-let-kubernetes-pod-run-a-local-script/66025424
+js: The deviceorientation events are blocked by feature policy. See https://github.com/WICG/feature-policy/blob/master/features.md#sensor-features
+> Finished.
+
+> Download result: download 4 url, 0 fail
