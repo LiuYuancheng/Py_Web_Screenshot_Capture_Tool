@@ -1,8 +1,8 @@
 #!/usr/bin/python
 #-----------------------------------------------------------------------------
-# Name:        webScreenShoter.py
+# Name:        PyWebScreenShoter.py
 #
-# Purpose:     This module will use different browser drivers API to capture the
+# Purpose:     This module will use Google-Chrome browser drivers API to capture the
 #              webpage's screen shot img based on the given url. The user can also
 #              use pyQT-5 QtWebEngineWidgets to download the whole web page by set
 #              the related flag. The user can list all the urls he wants to download 
@@ -11,26 +11,30 @@
 # Author:      Yuancheng Liu
 #
 # Created:     2021/11/23
-# Version:     v_0.2
-# Copyright:   n.a
-# License:     n.a
+# Version:     v_0.1.2
+# Copyright:   Copyright (c) 2024 LiuYuancheng
+# License:     MIT License 
 #-----------------------------------------------------------------------------
 
 import os
 import sys
 from time import sleep
+from datetime import datetime
 from urllib.parse import urlparse
 from selenium import webdriver
 
+# Import QT web API to capture the web page screen shot.
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import Qt, QUrl, QTimer
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineSettings
 
-GV_FLG = False  # Flag to identify whether use gloval value
-if GV_FLG: import webGlobal as gv
-URL_RCD = gv.URL_LIST if GV_FLG else 'urllist.txt'  # file to save url list
-RST_DIR = gv.DATA_DIR if GV_FLG else 'datasets'
-OUT_FILE = gv.SS_FILE_NAME if GV_FLG else 'shot.png'
+# Import selenium webdriver API to capture the web page screen shot.
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromeService
+from webdriver_manager.chrome import ChromeDriverManager
+
+QT_DRIVER = 1
+CH_DRIVER = 2
 
 #-----------------------------------------------------------------------------
 #-----------------------------------------------------------------------------
@@ -41,113 +45,114 @@ class QTCapture(QWebEngineView):
     # https://zetcode.com/pyqt/qwebengineview/
     # https://stackoverflow.com/questions/55231170/taking-a-screenshot-of-a-web-page-in-pyqt5
     # https://stackoverflow.com/questions/51154871/python-3-7-0-no-module-named-pyqt5-qtwebenginewidgets
+    webSize = (1024, 768) # default web page size
 
     #-----------------------------------------------------------------------------
-    def captureQT(self, url, outputDir):
-        self.outputFile = os.path.join(RST_DIR, outputDir, OUT_FILE)
-        self.load(QUrl(url))
-        self.loadFinished.connect(self._onLoaded)
-        # Create hidden view without scrollbars
-        self.setAttribute(Qt.WA_DontShowOnScreen)
-        self.page().settings().setAttribute(QWebEngineSettings.ShowScrollBars, False)
-        self.show()
+    def captureQT(self, url, outDirPath, outputName=None):
+        picName = outputName if outputName else "shot_"+datetime.now().strftime("%Y%m%d_%H%M%S")+'.png'
+        self.outputFile = os.path.join(outDirPath, picName)
+        try:
+            self.load(QUrl(url))
+            self.loadFinished.connect(self._onLoaded)
+            # Create hidden view without scrollbars
+            self.setAttribute(Qt.WA_DontShowOnScreen)
+            self.page().settings().setAttribute(QWebEngineSettings.ShowScrollBars, False)
+            self.show()
+            return True
+        except Exception as err:
+            print("Error > captureQT() capture error: %s" % str(err))
+            return False
 
     #-----------------------------------------------------------------------------
     def _onLoaded(self):
-        self.resize(self.page().contentsSize().toSize()) # Wait for resize
+        #self.resize(self.page().contentsSize().toSize()) # Wait for resize
+        self.resize(self.webSize[0], self.webSize[1])
         QTimer.singleShot(1000, self._takeScreenshot)
 
     #-----------------------------------------------------------------------------
     def _takeScreenshot(self):
         self.grab().save(self.outputFile, b'PNG')
-        self.app.quit()
+        if self.app: self.app.quit()
+
+    def setImgSize(self, sizeTuple):
+        self.webSize = sizeTuple
 
 #-----------------------------------------------------------------------------
 #-----------------------------------------------------------------------------
 class webScreenShoter(object):
-
-    """ Download the webpage screen shot base on the input url."""
-    def __init__(self, browserMD=False):
-        self.browserMD = browserMD
-        self.qtApp = None
-        self.qtDriver = None
-        if not self.browserMD: self.qtApp = QApplication(sys.argv)
+    """ Do the webpage screenshot based on the input urls list."""
+    def __init__(self):
+        # Init the Chrome capture dirver.
+        self.chDriver = None  
+        # Init the QT capture App
+        self.qtApp = QApplication(sys.argv)
+        self.qtDriver = QTCapture()
+        self.qtDriver.app = self.qtApp
 
     #-----------------------------------------------------------------------------
-    def getScreenShot(self, url, folderName, browserMD=None):
-        """ Init driver to capture the web screen shot based on the mode flag.
-        Args:
-            url ([str]): web url string.
-            folderName ([string]): folder path to save the web components.
-            browserMD ([bool], optional): User can reset the driver if he want to 
-                change. True: Browser driver, False: QT5 driver. Defaults to None.
-        Returns: [bool]: capture result.
-        """
-        if browserMD is bool: self.browserMD = browserMD
-        if self.browserMD:
-            self._captureBM(url, folderName)
-        elif self.qtApp:
-            self.qtDriver = QTCapture()
-            self.qtDriver.app = self.qtApp
-            self.qtDriver.captureQT(url, folderName)
-            self.qtApp.exec_()
+    def setQTimgSz(self, sizeTuple):
+        if self.qtDriver: self.qtDriver.setImgSize(sizeTuple)
+
+    #-----------------------------------------------------------------------------
+    def getScreenShot(self, urlList, outDirPath, driverMode=QT_DRIVER):
+        if not (type(urlList) in [list,tuple]): urlList = [urlList]
+        if not os.path.exists(outDirPath): os.mkdir(outDirPath)
+        if driverMode == QT_DRIVER:
+            for url in urlList:
+                self.qtDriver.captureQT(url, outDirPath)
+                self.qtApp.exec_()
+        elif driverMode == CH_DRIVER:
+            for url in urlList:
+                self._capturePage(url, outDirPath)
         else:
-            print("> Error: the capture driver is not defined.")
+            print("> Error: the capture driver mode:[%s] is not defined." %str(driverMode))
             return False
         return True
 
     #-----------------------------------------------------------------------------
-    def _captureBM(self, url, outputDir):
+    def _capturePage(self, url, outDirPath, outputName=None):
         """ Capture the url screen shot by browser driver.
-        Args:
-            url ([string]): web url string.
-            outputDir ([string]): folder path to save the web components.
+            Args:
+                url ([string]): web url string.
+                outputDir ([string]): folder path to save the web components.
         """
-        if sys.platform.startswith('win'):
-            driverPath = gv.BROWSER_DRIVER_W if GV_FLG else "chromedriver.exe"
-        else:
-            driverPath = gv.BROWSER_DRIVER_L if GV_FLG else "chromedriver"
-        driver = webdriver.Chrome(executable_path=driverPath)
-        driver.get(url)
-        sleep(1) # wait one second to let the browser to show the whole webpage
-        if not os.path.exists(RST_DIR): os.mkdir(RST_DIR)
-        filepath = os.path.join(RST_DIR, outputDir, OUT_FILE)
-        #print("> path:"+filepath)
-        driver.get_screenshot_as_file(filepath)
-        driver.quit()
-        driver = None
-        #print("> Finished...")
+        try:
+            self.chDriver = webdriver.Chrome(service=ChromeService(ChromeDriverManager().install()))
+            self.chDriver.get(url)
+            sleep(1) # wait one second to let the browser to show the whole webpage
+            picName = outputName if outputName else "shot_"+datetime.now().strftime("%Y%m%d_%H%M%S")+'.png'
+            outputFile = os.path.join(outDirPath, picName)
+            self.chDriver.get_screenshot_as_file(outputFile)
+            self.chDriver.quit()
+            return True
+        except Exception as err:
+            print("Error > _capturePage() capture error: %s" % str(err))
+            self.chDriver.quit()
+            return False
+    
+    #-----------------------------------------------------------------------------
+    def stop(self):
+        if self.chDriver: self.chDriver.quit()
+        if self.qtApp: self.qtApp.quit()
 
 #-----------------------------------------------------------------------------
 #-----------------------------------------------------------------------------
 def main():
-    soup = webScreenShoter(browserMD=False)
-    if not os.path.exists(RST_DIR):
-        os.mkdir(RST_DIR)
-    count = failCount = 0
-    print("> load url record file %s" % URL_RCD)
-    with open(URL_RCD) as fp:
-        urllines = fp.readlines()
-        for line in urllines:
-            if line[0] in ['#', '', '\n', '\r', '\t']:
-                continue  # jump comments/empty lines.
-            count += 1
-            print("> Process URL {}: {}".format(count, line.strip()))
-            if ('http' in line):
-                line = line.strip()
-                domain = str(urlparse(line).netloc)
-                folderName = "_".join((str(count), domain))
-                filepath = os.path.join(RST_DIR, folderName)
-                if not os.path.exists(filepath):
-                    os.mkdir(filepath)
-                result = soup.getScreenShot(line, folderName)
-                #soup.savePage('https://www.google.com', 'www_google_com')
-                if result:
-                    print('> Finished.')
-                else:
-                    failCount += 1
-    print("\n> Download result: download %s url, %s fail" %
-          (str(count), str(failCount)))
+    print("Start the Web screenshoter")
+    capturer = webScreenShoter()
+    print("Current working directory is : %s" % os.getcwd())
+    dirpath = os.path.dirname(os.path.abspath(__file__))
+    print("Current source code location : %s" % dirpath)
+    print("Select the driver mode: \n - 1: QT5 driver \n - 2: Chrome driver")
+    driverMode = int(input())
+    outputFolder = os.path.join(dirpath, "outputFolder")
+    while True:
+        print("Input the url:")
+        url = str(input())
+        if url in ('exist', 'quit', 'q', 'Q'): break
+        capturer.getScreenShot(url, outputFolder, driverMode=driverMode)
+        print('Finished')
+    capturer.stop()
 
 #-----------------------------------------------------------------------------
 if __name__ == '__main__':
