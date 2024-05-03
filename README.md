@@ -1,12 +1,29 @@
-# Web ScreenShoter
+# Python Web Screenshot Tool
 
-**Program Design Purpose**: We want to capture the screen shot images for several batch of webpages based on a list of URLs.
+**Program Design Purpose**: 
 
+Our objective is to develop a Python library for capturing webpage screenshots in batches, based on a list of URLs, to support various programmatic use cases. The program workflow is depicted below:
 
+![](doc/img/screenshoter.png)
 
-#### Introduction
+` Figure-00: Python_web_screenshot_tool_program_workflow_diagram, version v0.1.2 (2024)`
 
-This module will use different web browser's driver or Qt5 lib QtWebEngineWidgets to capture the part or the whole webpage's screen shot based on the given URL. The user can select the related lib he want to use to capture the webpage during the object init by passing in the "type" parameter. 
+The library utilizes two different web drivers, Selenium Google Chrome Driver and QT5 Web Engine, to capture webpage screenshots. It provides a flexible API that allows integration with other programs seamlessly.
+
+```
+# version:     v0.1.2
+# Created:     2021/11/23
+# Copyright:   Copyright (c) 2024 LiuYuancheng
+# License:     MIT License
+```
+
+[TOC]
+
+------
+
+### Introduction
+
+This module will use different web browser's driver or Qt5 lib QtWebEngineWidgets to capture the part or the whole webpage's screen shot based on the given URL. The user can select the related lib he want to use to capture the webpage during the object init by passing in the "driverMode" parameter. The module is a single threading program.
 
 To prosses multiple URLs at the same time, The user can list all the url he wants to download  in the file "urllist.txt" as shown below: 
 
@@ -19,21 +36,19 @@ https://www.google.com/search?q=github&sxsrf=AOaemvJh3t5_h8H85AE8Ajbb1IMnBrRISA%
 https://stackoverflow.com/questions/66022042/how-to-let-kubernetes-pod-run-a-local-script/66025424
 ```
 
-###### Program Workflow
-
-![](doc/img/screenshoter.png )
-
-Version: v_0.2
+Then run the test case program `testCase.py`, then the screen shot will be save in the output folder `outputFolder`
 
 
 
 ------
 
-#### Program Setup
+### Program Setup
 
-###### Development Environment : python 3.7.4
 
-###### Additional Lib/Software Need
+
+##### Development Environment : python 3.7.4
+
+##### Additional Lib/Software Need
 
 1. **selenium**
 
@@ -56,58 +71,52 @@ Version: v_0.2
 
    link: https://chromedriver.chromium.org/downloads
 
-4. 
+   
 
-###### Hardware Needed : None
 
-###### Program Files List 
+##### Hardware Needed : None
 
-version: v0.2
+##### Program Files List 
 
 | Program File       | Execution Env | Description                                  |
 | ------------------ | ------------- | -------------------------------------------- |
-| webScreenShoter.py | python 3      | Main executable program use the capture API. |
+| webScreenShoter.py | python 3.7+   | Main executable program with the lib API.    |
+| testCase.py        | python 3.7+   | Test case program and usage example.         |
+| outputFile/*.png   |               | All the captured web page screen shot files. |
 | urllist.txt        |               | url record list.                             |
 
 
 
 ------
 
-#### Program Usage
+### Program Usage
 
-###### Module API Usage
 
-1. WebScreenShoter  Initialization : 
+
+#### Program Execution 
+
+The user can run the program directly to process the url one by one or copy all the url strings in the url list file to batch process them.  All the screen shot will be save in the output folder `outputFolder` under `shot_yymmdd_hhmmss.png` format. 
+
+**Use Console Interface** 
+
+Run the program directly and follow the steps to process the url: 
 
 ```
-obj = webScreenShoter(browserMD=False)
+python webScreenShoter.py
 ```
 
-- **browserMD**: Set to "True" to capture the web screenshot by using browser driver this need the computer with display output and installed the google-chrome browser , set to "False" to capture the web screen shot with pyQT5-webEngine. Default value is False.
+![](doc/img/execute.png)
 
-2. Call API method "getScreenShot()"  to capture the screen shot of the webpage.
+` Figure-1: Python_web_screenshot_tool_execution, version v0.1.2 (2024)`
 
-   ```
-   obj.getScreenShot('<url>', '<folder_name>')
-   
-   # Exampe:
-   obj.getScreenShot('https://www.google.com', 'www_google_com')
-   ```
-
-3.  Check the result: The web screen shot will be saved as file "shot.png" in the folder you set in the function "getScreenShot()". If the user use browser driver to capture, the resolution of shot.png will be a 1000x1000, else  whole page will be saved if QT5-webengine is used for capture.
-
-4. --
-
-
-
-###### Program Execution 
+**Batches Process** 
 
 1. Copy the urls you want to check in the url record file "**urllist.txt**"
 
 2. Cd to the program folder and run program execution cmd: 
 
    ```
-   python webScreenShoter.py
+   python testCase.py
    ```
 
 3. Check the result: 
@@ -116,11 +125,28 @@ obj = webScreenShoter(browserMD=False)
 
 
 
+#### Module API Usage
+
+1. WebScreenShoter  Initialization : `obj = webScreenShoter()`
+
+2. Call API method "getScreenShot()"  to capture the screen shot of the webpage.
+
+   ```
+   obj.getScreenShot(['<url>'], '<folder_name>')
+   
+   # Exampe:
+   obj.getScreenShot(urlList, outputFolder, driverMode=MODE)
+   ```
+
+3. Check the result: The web screen shot will be saved as file "shot.png" in the folder you set in the function "getScreenShot()". If the user use browser driver to capture, the resolution of shot.png will be a 1000x1000, else  whole page will be saved if QT5-webengine is used for capture.
+
+   
+
 ------
 
 #### Problem and Solution
 
-###### Problem: Fail to capture url screen shot under browser mode
+##### Problem: Fail to capture url screen shot under browser mode
 
 **OS Platform** : Windows
 
@@ -142,6 +168,7 @@ obj = webScreenShoter(browserMD=False)
 
 #### Reference 
 
+- https://pypi.org/project/webdriver-manager/
 - https://zetcode.com/pyqt/qwebengineview/
 - https://stackoverflow.com/questions/55231170/taking-a-screenshot-of-a-web-page-in-pyqt5
 - https://stackoverflow.com/questions/51154871/python-3-7-0-no-module-named-pyqt5-qtwebenginewidgets
@@ -150,5 +177,5 @@ obj = webScreenShoter(browserMD=False)
 
 ------
 
-> Last edit by LiuYuancheng(liu_yuan_cheng@hotmail.com) at 02/12/2021
+> Last edit by LiuYuancheng(liu_yuan_cheng@hotmail.com) at 03/05/2024, if you have any problem, please send me a message. 
 
