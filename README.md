@@ -1,8 +1,6 @@
 # Python Web Screenshot Tool
 
-**Program Design Purpose**: 
-
-Our objective is to develop a Python library for capturing webpage screenshots in batches, based on a list of URLs, to support various programmatic use cases. The program workflow is depicted below:
+**Program Design Purpose**: Our objective is to develop a Python library for capturing webpage screenshots in batches, based on a list of URLs, to support various programmatic use cases. The program workflow is depicted below:
 
 ![](doc/img/screenshoter.png)
 
@@ -17,15 +15,31 @@ The library utilizes two different web drivers, Selenium Google Chrome Driver an
 # License:     MIT License
 ```
 
+**Table of Contents**
+
 [TOC]
+
+- [Python Web Screenshot Tool](#python-web-screenshot-tool)
+    + [Introduction](#introduction)
+    + [Program Setup](#program-setup)
+        * [Development Environment : Python 3.7.4](#development-environment---python-374)
+        * [Additional Lib/Software Need](#additional-lib-software-need)
+        * [Hardware Needed : None](#hardware-needed---none)
+        * [Program Files List](#program-files-list)
+    + [Program Usage](#program-usage)
+      - [Program Execution](#program-execution)
+      - [Module API Usage](#module-api-usage)
+      - [Problem and Solution](#problem-and-solution)
+        * [Problem: Fail to capture url screen shot under browser mode](#problem--fail-to-capture-url-screen-shot-under-browser-mode)
+      - [Reference](#reference)
 
 ------
 
 ### Introduction
 
-This module will use different web browser's driver or Qt5 lib QtWebEngineWidgets to capture the part or the whole webpage's screen shot based on the given URL. The user can select the related lib he want to use to capture the webpage during the object init by passing in the "driverMode" parameter. The module is a single threading program.
+This module enables users to capture screenshots of either specific parts or entire webpages using different web browser drivers or the Qt5 library's QtWebEngineWidgets, based on the provided URL. Users can select the desired library for capturing webpages during object initialization by specifying the "driverMode" parameter. The module operates as a single-threaded program.
 
-To prosses multiple URLs at the same time, The user can list all the url he wants to download  in the file "urllist.txt" as shown below: 
+To process multiple URLs simultaneously, users can list all the URLs they wish to capture in the "urllist.txt" file as demonstrated below:
 
 ```
 # Add the URL you want to download line by line(The url must start with 'http' or 'https' ):
@@ -36,7 +50,7 @@ https://www.google.com/search?q=github&sxsrf=AOaemvJh3t5_h8H85AE8Ajbb1IMnBrRISA%
 https://stackoverflow.com/questions/66022042/how-to-let-kubernetes-pod-run-a-local-script/66025424
 ```
 
-Then run the test case program `testCase.py`, then the screen shot will be save in the output folder `outputFolder`
+Afterward, execute the test case program `testCase.py`, and the captured screenshots will be saved in the output folder `outputFolder`.
 
 
 
@@ -46,11 +60,11 @@ Then run the test case program `testCase.py`, then the screen shot will be save 
 
 
 
-##### Development Environment : python 3.7.4
+##### Development Environment : Python 3.7.4
 
 ##### Additional Lib/Software Need
 
-1. **selenium**
+1. **Selenium**
 
    install: https://selenium-python.readthedocs.io/
 
@@ -70,8 +84,6 @@ Then run the test case program `testCase.py`, then the screen shot will be save 
 3. **Chrome browser driver**( optional, this lib need to work with selenium and fit your computer's browser version)
 
    link: https://chromedriver.chromium.org/downloads
-
-   
 
 
 ##### Hardware Needed : None
@@ -95,11 +107,11 @@ Then run the test case program `testCase.py`, then the screen shot will be save 
 
 #### Program Execution 
 
-The user can run the program directly to process the url one by one or copy all the url strings in the url list file to batch process them.  All the screen shot will be save in the output folder `outputFolder` under `shot_yymmdd_hhmmss.png` format. 
+Users have two options for executing the program: processing URLs individually or batch processing multiple URLs. All the screen shot image file will be saved in the output folder `outputFolder` under `shot_yymmdd_hhmmss.png` format. 
 
 **Use Console Interface** 
 
-Run the program directly and follow the steps to process the url: 
+To process URLs individually, users can run the program directly and follow the steps provided:
 
 ```
 python webScreenShoter.py
@@ -109,38 +121,36 @@ python webScreenShoter.py
 
 ` Figure-1: Python_web_screenshot_tool_execution, version v0.1.2 (2024)`
 
-**Batches Process** 
+**Batches Process URL with Record File** 
 
-1. Copy the urls you want to check in the url record file "**urllist.txt**"
+1. Prepare a list of URLs to be processed by copying them into the URL record file "**urllist.txt**".
 
-2. Cd to the program folder and run program execution cmd: 
+2. Navigate to the program folder and execute the program using the following command:
 
    ```
    python testCase.py
    ```
 
-3. Check the result: 
-
-   For example, if you copy the url "https://www.carousell.sg/" as the first url you want to check into the file "urllist.txt" file, the screenshot file **shot.png** will be save under folder "1_www.carousell.sg_files"
+3. Check the results: for instance, if "https://www.carousell.sg/" is the first URL listed in "urllist.txt", the screenshot file **shot.png** will be saved in the folder "1_www.carousell.sg_files".
 
 
 
 #### Module API Usage
 
-1. WebScreenShoter  Initialization : `obj = webScreenShoter()`
+WebScreenShoter Initialization: `obj = webScreenShoter()`
 
-2. Call API method "getScreenShot()"  to capture the screen shot of the webpage.
+Calling API Method "getScreenShot()": Capture a screenshot of the webpage.
 
-   ```
-   obj.getScreenShot(['<url>'], '<folder_name>')
-   
-   # Exampe:
-   obj.getScreenShot(urlList, outputFolder, driverMode=MODE)
-   ```
+```
+Check the Result: The webpage screenshot will be saved as a file named "shot.png" in the folder specified in the "getScreenShot()" function. If a browser driver is used for capture, the resolution of "shot.png" will be 1000x1000 pixels; otherwise, the entire webpage will be saved if QT5-WebEngine is used for capture.obj.getScreenShot(['<url>'], '<folder_name>')
 
-3. Check the result: The web screen shot will be saved as file "shot.png" in the folder you set in the function "getScreenShot()". If the user use browser driver to capture, the resolution of shot.png will be a 1000x1000, else  whole page will be saved if QT5-webengine is used for capture.
+# Exampe:
+obj.getScreenShot(urlList, outputFolder, driverMode=MODE)
+```
 
-   
+Check the result: The web screen shot will be saved as file "shot.png" in the folder you set in the function "getScreenShot()". If the user use browser driver to capture, the resolution of shot.png will be a 1000x1000, else  whole page will be saved if QT5-webengine is used for capture.
+
+
 
 ------
 

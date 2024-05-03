@@ -2,7 +2,7 @@
 #-----------------------------------------------------------------------------
 # Name:        testCase.py
 #
-# Purpose:     This module is a test case module used as and example and test 
+# Purpose:     This module is a test case module used as an example and test 
 #              the function of the module <webScreenShoter.py>
 #              
 # Author:      Yuancheng Liu
@@ -21,14 +21,14 @@ MODE = QT_DRIVER
 
 #-----------------------------------------------------------------------------
 #-----------------------------------------------------------------------------
-def testCase():
+def testCase(inputfile, outputFolder):
     print("Current working directory is : %s" % os.getcwd())
     dirpath = os.path.dirname(os.path.abspath(__file__))
     print("Current source code location : %s" % dirpath)
     capturer = webScreenShoter.webScreenShoter()
-    urlListFile = "urlList.txt"
+    urlListFile = inputfile
     urlListPath = os.path.join(dirpath, urlListFile)
-    outputFolder = os.path.join(dirpath, "outputFolder")
+    outputFolder = os.path.join(dirpath, outputFolder)
     print("> load url record file %s" % urlListPath)
     urlList = []
     with open(urlListPath) as fp:
@@ -42,4 +42,6 @@ def testCase():
 
 #-----------------------------------------------------------------------------
 if __name__ == '__main__':
-    testCase()
+    inputfile = "urlList.txt"
+    outputFolder = "outputFolder"
+    testCase(inputfile, outputFolder)
