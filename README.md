@@ -1,12 +1,12 @@
 # Python Web Screenshot Tool
 
-**Program Design Purpose**: Our objective is to develop a Python library for capturing webpage screenshots in batches, based on a list of URLs, to support various programmatic use cases. The program workflow is depicted below:
+**Program Design Purpose**: Our objective is to develop a Python library for bigdata project's data collection purpose which can capture webpage screenshots in batches, based on a list of URLs, to support various programmatic use cases. The program workflow is depicted below:
 
 ![](doc/img/screenshoter.png)
 
 ` Figure-00: Python_web_screenshot_tool_program_workflow_diagram, version v0.1.2 (2024)`
 
-The library utilizes two different web drivers, Selenium Google Chrome Driver and QT5 Web Engine, to capture webpage screenshots. It provides a flexible API that allows integration with other programs seamlessly.
+The library utilizes two different web drivers, Selenium Google Chrome Driver and QT5 Web Engine, to capture webpage screenshots. It provide a flexible API that allows integration with other programs seamlessly.
 
 ```
 # version:     v0.1.2
@@ -37,11 +37,21 @@ The library utilizes two different web drivers, Selenium Google Chrome Driver an
 
 ### Introduction
 
-This module enables users to capture screenshots of either specific parts or entire webpages using different web browser drivers or the Qt5 library's QtWebEngineWidgets, based on the provided URL. Users can select the desired library for capturing webpages during object initialization by specifying the "driverMode" parameter. The module operates as a single-threaded program.
+This module enables users to capture screenshots of either specific parts or entire webpages using different web browser drivers or the Qt5 library's QtWebEngineWidgets, based on the provided URL. Users can select the desired library for capturing webpages during object initialization by specifying the "driverMode" parameter. The module operates as a single-threaded program. The module Input and output flow is shown below:
 
-To process multiple URLs simultaneously, users can list all the URLs they wish to capture in the "urllist.txt" file as demonstrated below:
-
+```mermaid
+flowchart TD
+	A[User_Input] --> |Web_URL_Str_list| B
+	B[Web_Screenshot_Capturer] --> D
+	B[Web_Screenshot_Capturer] --> E
+	D[Selenium Google Chrome Driver]-->|Page_Screenshot_Image|C
+	E[pyQT5-PyQtWebEngine]-->|Page_Screenshot_Image|C	
+	C[Output_folder]
 ```
+
+To process multiple URLs simultaneously, users can list all the URLs they wish to capture in the "urllist.txt" file as demonstrated below (line start with char '#' will be treated as comments and ignored) :
+
+```python
 # Add the URL you want to download line by line(The url must start with 'http' or 'https' ):
 # example: https://www.google.com
 https://www.google.com
