@@ -160,13 +160,15 @@ obj.getScreenShot(urlList, outputFolder, driverMode=MODE)
 
 Check the result: The web screen shot will be saved as file "shot.png" in the folder you set in the function "getScreenShot()". If the user use browser driver to capture, the resolution of shot.png will be a 1000x1000, else  whole page will be saved if QT5-webengine is used for capture.
 
+> For detail API usage, please refer to document [Lib_api_doc.html](Lib_api_doc.html)
+
 
 
 ------
 
 #### Problem and Solution
 
-##### Problem: Fail to capture url screen shot under browser mode
+##### Problem[0]: Fail to capture url screen shot under browser mode
 
 **OS Platform** : Windows
 
